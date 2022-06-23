@@ -12,6 +12,7 @@ CORS(app, resources={r"/app/*": {"origins": "*"}})
 @app.route('/app/getVideo',methods=['post'])
 @cross_origin()
 def downloadVideo():
+    
     save_path=pathlib.Path().resolve()
     save_path=str(save_path)+'\\'
     url=request.data
@@ -19,19 +20,11 @@ def downloadVideo():
     print(url)
     yt = YouTube(url) 
     mp4files = yt.streams.filter(file_extension='mp4').get_highest_resolution().itag #getting higher resolution stream itag
-    
-    # print(mp4files.itag)
-    # for i in mp4files:
-    #    print(i.itag)
-    # print(d_video)
     d_video=yt.streams.get_by_itag(mp4files) #getting stream based on itag
-    print(d_video.default_filename)
+    print(d_video.default_filename) #default_filename gives the name of the video
     d_video.download(save_path) #downloading the video to path specified in save_path
-    #yt.streams.download()
-    return send_file(save_path+d_video.default_filename,as_attachment=True)
-
-    # return jsonify(['hello'])
-
+    response=send_file(save_path+d_video.default_filename,as_attachment=True,download_name=d_video.default_filename) #sending the downloaded video 
+    return response
 if __name__ == '__main__':
     app.run(debug=True)
     
