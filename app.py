@@ -3,11 +3,11 @@ from pytube import YouTube
 from flask_cors import CORS, cross_origin
 from sqlalchemy import true
 import pathlib
-
+import os
 app = Flask(__name__)
 CORS(app, resources={r"/app/*": {"origins": "*"}})
 
-
+port = int(os.getenv('PORT'))
 
 @app.route('/app/getVideo',methods=['post'])
 @cross_origin()
@@ -25,6 +25,7 @@ def downloadVideo():
     d_video.download(save_path) #downloading the video to path specified in save_path
     response=send_file(save_path+d_video.default_filename,as_attachment=True,download_name=d_video.default_filename) #sending the downloaded video 
     return response
+
 if __name__ == '__main__':
-   app.run(debug=True,port=33507)
+   app.run(debug=True,host='0.0.0.0', port=port)
     
