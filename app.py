@@ -7,7 +7,13 @@ import os
 app = Flask(__name__)
 CORS(app, resources={r"/app/*": {"origins": "*"}})
 
-port = int(os.getenv('PORT'))
+
+
+@app.route("/")
+@cross_origin()
+def hello():
+    return 'welcome to youtubeDownloader'
+    
 
 @app.route('/app/getVideo',methods=['post'])
 @cross_origin()
@@ -27,5 +33,6 @@ def downloadVideo():
     return response
 
 if __name__ == '__main__':
-   app.run(debug=True,host='0.0.0.0', port=port)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host='0.0.0.0', port=port)
     
