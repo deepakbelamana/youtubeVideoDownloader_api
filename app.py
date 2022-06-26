@@ -26,5 +26,5 @@ def downloadVideo():
     response=send_file(save_path+d_video.default_filename,as_attachment=True,download_name=d_video.default_filename) #sending the downloaded video 
     return response
 if __name__ == '__main__':
-   app.run(debug=True)
+   app.run(debug=True,port=33507)
     
