@@ -21,6 +21,7 @@ def downloadVideo():
     
     save_path=pathlib.Path().resolve()
     save_path=str(save_path)+'\\'
+    print('file Path',save_path)
     url=request.data
     url=url.decode()
     print(url)
