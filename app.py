@@ -4,6 +4,9 @@ from flask_cors import CORS, cross_origin
 from sqlalchemy import true
 import pathlib
 import os
+import sys
+
+
 app = Flask(__name__)
 CORS(app, resources={r"/app/*": {"origins": "*"}})
 
@@ -18,7 +21,7 @@ def hello():
 @app.route('/app/getVideo',methods=['post'])
 @cross_origin()
 def downloadVideo():
-    
+
     save_path=pathlib.Path().resolve()
     save_path=str(save_path)+'/'
     print('file Path',save_path)
@@ -32,6 +35,16 @@ def downloadVideo():
     d_video.download(save_path) #downloading the video to path specified in save_path
     response=send_file(save_path+d_video.default_filename,as_attachment=True,download_name=d_video.default_filename) #sending the downloaded video 
     return response
+
+@app.route('/app/delete')
+@cross_origin()
+def deleteDownloads():
+    path=os.getcwd() #get current working directory
+    dir_path=os.listdir(path)  #get list of files 
+    for file in dir_path: 
+        if file.endswith(".mp4"):   #checking exetension of files if it is .mp4 then delete
+            os.remove(os.path.join(path,file))
+    return jsonify('deleted')
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))
